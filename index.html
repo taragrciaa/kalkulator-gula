@@ -21,7 +21,7 @@
         }
         /* Glassmorphism Card Style */
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(204, 251, 241, 0.8);
             box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.08);
@@ -57,7 +57,7 @@
 <body>
 
     <!-- Top Header Bar -->
-    <header class="sticky top-0 z-40 bg-teal-600/90 backdrop-blur-md text-white shadow-md">
+    <header class="sticky top-0 z-40 bg-teal-600 text-white shadow-md">
         <div class="max-w-xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-9 h-9 bg-white text-teal-600 rounded-xl flex items-center justify-center font-black text-lg shadow-inner">
@@ -80,7 +80,7 @@
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[92%] max-w-lg bg-white/90 backdrop-blur-xl border border-teal-100 shadow-2xl rounded-2xl z-50 px-2 py-2">
+    <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[92%] max-w-lg bg-white/95 backdrop-blur-xl border border-teal-100 shadow-2xl rounded-2xl z-50 px-2 py-2">
         <div class="flex justify-around items-center">
             <button onclick="switchTab('edukasi')" id="nav-edukasi" class="nav-btn flex flex-col items-center py-1 px-3 rounded-xl transition-all duration-200 text-teal-700 font-semibold bg-teal-50">
                 <i class="fa-solid fa-graduation-cap text-lg mb-0.5"></i>
@@ -113,8 +113,7 @@
             waterMl: parseInt(localStorage.getItem('manisku_water')) || 0,
             consumedItems: JSON.parse(localStorage.getItem('manisku_items')) || [
                 { id: 1, name: 'Es Teh Jumbo Kaki Lima (700ml)', sugar: 40 }
-            ],
-            searchTerm: ''
+            ]
         };
 
         // Preset Database (Modern, Tradisional, Kaki Lima)
@@ -147,6 +146,8 @@
         // Render Functions
         function render() {
             const app = document.getElementById('app');
+            if (!app) return;
+            
             updateNavUI();
 
             if (state.currentTab === 'edukasi') {
@@ -157,6 +158,7 @@
                 app.innerHTML = renderKalkulator();
             } else if (state.currentTab === 'konverter') {
                 app.innerHTML = renderKonverter();
+                calculateConvert();
             } else if (state.currentTab === 'solusi') {
                 app.innerHTML = renderSolusi();
             }
@@ -181,10 +183,9 @@
         // VIEW 1: EDUKASI
         function renderEdukasi() {
             return `
-                <div class="space-y-5 animate-fade-in">
+                <div class="space-y-5">
                     <!-- Banner Warning Krisis Cuci Darah -->
                     <div class="bg-gradient-to-br from-rose-500 to-red-600 text-white rounded-2xl p-5 shadow-lg relative overflow-hidden">
-                        <div class="absolute -right-4 -bottom-4 text-white/10 text-8xl font-black">🩸</div>
                         <div class="relative z-10">
                             <span class="bg-white/20 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
                                 <i class="fa-solid fa-triangle-exclamation mr-1"></i>Krisis Kesehatan Remaja
@@ -242,13 +243,6 @@
                                     <p class="text-[11px] text-gray-600 mt-0.5">Kelebihan fruktosa dari sirup manis tidak bisa diolah dan langsung diubah menjadi lemak hati (Nonalcoholic Fatty Liver Disease).</p>
                                 </div>
                             </div>
-                            <div class="p-3 bg-white rounded-xl border border-teal-100 flex items-start gap-3 hover:shadow-md transition">
-                                <div class="w-10 h-10 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center shrink-0 text-lg">✨</div>
-                                <div>
-                                    <h4 class="text-xs font-bold text-gray-900">Kulit (Penuaan Dini & Jerawat)</h4>
-                                    <p class="text-[11px] text-gray-600 mt-0.5">Proses Glikasi (AGEs) merusak kolagen dan elastin kulit, memicu keriput dini, jerawat membandel, serta inflamasi.</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -274,7 +268,7 @@
         // VIEW 2: TAHUKAH KAMU?
         function renderTahukah() {
             return `
-                <div class="space-y-5 animate-fade-in">
+                <div class="space-y-5">
                     <div class="text-center py-2">
                         <h2 class="text-lg font-black text-teal-900">Tahukah Kamu? 💡</h2>
                         <p class="text-xs text-teal-600">Fakta Unik & Mitos seputar Konsumsi Gula Harian</p>
@@ -284,11 +278,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-gradient-to-br from-teal-500 to-emerald-600 text-white p-4 rounded-2xl shadow-md text-center">
                             <div class="text-3xl font-black">#5</div>
-                            <div class="text-[10px] uppercase font-bold text-teal-100 mt-1">Peringkat Diabetes Indonesia di Dunia (IDF Atlas)</div>
+                            <div class="text-[10px] uppercase font-bold text-teal-100 mt-1">Peringkat Diabetes Indonesia di Dunia</div>
                         </div>
                         <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-4 rounded-2xl shadow-md text-center">
                             <div class="text-3xl font-black">40g+</div>
-                            <div class="text-[10px] uppercase font-bold text-amber-100 mt-1">Rata-Rata Gula dalam 1 Es Teh Jumbo Kaki Lima</div>
+                            <div class="text-[10px] uppercase font-bold text-amber-100 mt-1">Gula dalam 1 Es Teh Jumbo Kaki Lima</div>
                         </div>
                     </div>
 
@@ -300,7 +294,7 @@
                             <div class="flip-card-inner relative w-full h-full rounded-2xl shadow-md">
                                 <div class="flip-card-front absolute inset-0 bg-rose-50 border border-rose-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
                                     <span class="bg-rose-200 text-rose-800 text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">MITOS POPULER</span>
-                                    <h4 class="font-bold text-xs text-rose-900">"Gula Aren, Madu & Gula Jawa Bebas Kalori dan Aman Sebanyak-banyaknya"</h4>
+                                    <h4 class="font-bold text-xs text-rose-900">"Gula Aren & Madu Bebas Kalori & Aman Sebanyak-banyaknya"</h4>
                                     <p class="text-[10px] text-rose-600 mt-2 font-medium">Klik untuk balik ↺</p>
                                 </div>
                                 <div class="flip-card-back absolute inset-0 bg-emerald-600 text-white rounded-2xl p-4 flex flex-col justify-center items-center text-center">
@@ -313,4 +307,10 @@
                         <div class="flip-card h-36 cursor-pointer" onclick="this.classList.toggle('flipped')">
                             <div class="flip-card-inner relative w-full h-full rounded-2xl shadow-md">
                                 <div class="flip-card-front absolute inset-0 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center">
-                                    <span class="bg-amber-200 text-amber-800 text-[9px] font-bold px-
+                                    <span class="bg-amber-200 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">MITOS POPULER</span>
+                                    <h4 class="font-bold text-xs text-amber-900">"Jus Buah Kemasan Sama Sehatnya dengan Buah Utuh"</h4>
+                                    <p class="text-[10px] text-amber-600 mt-2 font-medium">Klik untuk balik ↺</p>
+                                </div>
+                                <div class="flip-card-back absolute inset-0 bg-teal-700 text-white rounded-2xl p-4 flex flex-col justify-center items-center text-center">
+                                    <span class="bg-teal-900 text-teal-200 text-[9px] font-bold px-2 py-0.5 rounded-full mb-1">FAKTA MEDIS</span>
+                                    <p class="text-[11px] leading-relaxed">Jus kemasan telah kehilangan serat alami (fiber) dan sering ditambahi gula konsentrat. Penyerapan gulanya secepat minuman soda!</p
