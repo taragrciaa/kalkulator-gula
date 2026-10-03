@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ManisKu – Kalkulator Gula Harian</title>
+<meta name="description" content="Pelajari bahaya gula berlebih dan hitung asupan gula harianmu dengan kalkulator interaktif.">
+<meta name="theme-color" content="#7fd6e6">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%237fd6e6'/%3E%3Crect x='146' y='146' width='220' height='220' rx='40' fill='white'/%3E%3Ccircle cx='256' cy='256' r='46' fill='%23f4a6c6'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%237fd6e6'/%3E%3Crect x='146' y='146' width='220' height='220' rx='40' fill='white'/%3E%3Ccircle cx='256' cy='256' r='46' fill='%23f4a6c6'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/"><span class="logo"></span>ManisKu</a>
+  <nav>
+    <a href="#/" data-nav="home">Edukasi</a>
+    <a href="#/kalkulator" data-nav="calc">Kalkulator</a>
+    <button id="installBtn" class="btn small" hidden>Pasang</button>
+  </nav>
+</header>
+
+<main>
+  <!-- BERANDA / EDUKASI -->
+  <section id="view-home" class="view">
+    <div class="hero card">
+      <h1>Seberapa manis harimu?</h1>
+      <p>Segelas boba saja bisa menghabiskan hampir seluruh jatah gula sehari. Gula berlebih terasa menyenangkan hari ini, tetapi dampaknya menumpuk pelan-pelan.</p>
+      <a class="btn" href="#/kalkulator">Hitung gula hari ini</a>
+      <div class="cubes" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </div>
+
+    <h2>Risiko gula berlebih</h2>
+    <div class="grid">
+      <article class="card risk"><span class="ico">⚖️</span><h3>Obesitas</h3><p>Minuman manis menambah kalori tanpa membuat kenyang, sehingga berat badan mudah naik.</p></article>
+      <article class="card risk"><span class="ico">🩸</span><h3>Diabetes melitus</h3><p>Lonjakan gula darah yang sering membebani insulin dan meningkatkan risiko diabetes tipe 2.</p></article>
+      <article class="card risk"><span class="ico">🦷</span><h3>Karies gigi</h3><p>Bakteri di mulut mengubah gula menjadi asam yang mengikis email gigi.</p></article>
+      <article class="card risk"><span class="ico">❤️</span><h3>Penyakit jantung</h3><p>Asupan gula tinggi dikaitkan dengan tekanan darah dan kadar lemak darah yang kurang sehat.</p></article>
+    </div>
+
+    <h2>Berapa batas amannya?</h2>
+    <div class="card standard">
+      <div class="big">50 g<small>≈ 4 sendok makan per hari untuk dewasa</small></div>
+      <p>Kemenkes RI menganjurkan gula tambahan maksimal 50 gram (4 sdm) per hari. WHO menyarankan gula bebas kurang dari 10% energi harian, dan idealnya di bawah 5% (sekitar 25 gram) untuk manfaat kesehatan tambahan.</p>
+      <p class="muted">Gula yang dihitung adalah gula tambahan dalam minuman dan makanan olahan, bukan gula alami dalam buah utuh.</p>
+    </div>
+  </section>
+
+  <!-- KALKULATOR -->
+  <section id="view-calc" class="view" hidden>
+    <h2>Kalkulator gula harian</h2>
+
+    <div class="card">
+      <h3>1. Profilmu</h3>
+      <div class="row">
+        <label>Kategori usia
+          <select id="profile">
+            <option value="anak">Anak-anak (25 g)</option>
+            <option value="remaja">Remaja (40 g)</option>
+            <option value="dewasa">Dewasa (50 g)</option>
+            <option value="lansia">Lansia (40 g)</option>
+          </select>
+        </label>
+        <label>Atau batas kustom (gram)
+          <input id="custom" type="number" min="1" max="300" inputmode="decimal" placeholder="Kosongkan jika tidak perlu">
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>2. Tambah makanan atau minuman</h3>
+      <div id="presets" class="chips"></div>
+      <form id="addForm" class="row" autocomplete="off">
+        <label>Nama
+          <input id="name" type="text" maxlength="40" placeholder="Contoh: Teh manis kemasan" required>
+        </label>
+        <label>Gula (gram)
+          <input id="grams" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="0" required>
+        </label>
+        <label>Jumlah
+          <input id="qty" type="number" min="1" max="20" value="1" inputmode="numeric" required>
+        </label>
+        <button class="btn" type="submit">Tambahkan</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="between"><h3>3. Catatan hari ini</h3><button id="clearBtn" class="btn ghost small">Hapus semua</button></div>
+      <ul id="list" class="list"></ul>
+    </div>
+
+    <div class="card" id="result" aria-live="polite">
+      <h3>Hasil analisis</h3>
+      <div class="between"><span id="badge" class="badge">Aman</span><strong id="pct">0%</strong></div>
+      <div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div id="bar"></div></div>
+      <div class="stats">
+        <div><b id="sTotal">0 g</b><span>Total konsumsi</span></div>
+        <div><b id="sLimit">50 g</b><span>Batas harian</span></div>
+        <div><b id="sSdt">0 sdt</b><span>Setara sendok teh</span></div>
+        <div><b id="sSdm">0 sdm</b><span>Setara sendok makan</span></div>
+      </div>
+      <div id="advice"></div>
+    </div>
+    <p class="muted center">Nilai gula pada preset adalah perkiraan rata-rata. Cek label kemasan untuk angka yang tepat. Aplikasi ini bukan pengganti saran dokter atau ahli gizi.</p>
+  </section>
+</main>
+
+<footer class="foot">ManisKu · Edukasi gula harian · Berjalan offline sebagai PWA</footer>
+<script src="/app.js"></script>
+</body>
+</html>
