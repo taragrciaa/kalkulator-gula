@@ -1,13 +1,13 @@
 {
-  "name": "ManisKu – Kalkulator Gula Harian",
+  "name": "ManisKu – Edukasi & Kalkulator Gula",
   "short_name": "ManisKu",
-  "description": "Edukasi bahaya gula berlebih dan kalkulator asupan gula harian.",
+  "description": "Edukasi medis gula berlebih, kalkulator gula harian, konverter, dan action plan.",
   "lang": "id",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f1f8fb",
+  "background_color": "#eef7fa",
   "theme_color": "#7fd6e6",
   "icons": [
     {
