@@ -9,26 +9,56 @@ try{const o=JSON.parse(localStorage.getItem(K))||{};Object.assign(S,o);if(o.ml==
 if(S.day!==TODAY){S.ml=0;S.day=TODAY}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 const tot=()=>S.items.reduce((a,i)=>a+i.g*i.q,0);
-const UI={tab:0,pq:1,sel:0,sz:1,sw:0},EST={photo:null,ml:500,k:0,si:0};
+const UI={tab:0,pq:1,sel:0,sz:1,sw:0,org:'ginjal',en:2000,stp:0},EST={photo:null,ml:500,k:0,si:0};
 
-/* ---------- DATA ---------- */
+/* ---------- DATA ILUSTRASI ---------- */
 const OI={
 ginjal:'<path class="f" d="M30 7c-9-2-19 3-19 15 0 7 4 10 9 11 5 1 4 6 9 6 7 0 11-8 9-16-1-8-3-14-8-16z"/><path class="s" d="M34 20c-4 2-4 8 0 10"/>',
 otak:'<path class="f" d="M24 9c-4-3-11-1-12 5-4 1-6 6-3 10-2 5 1 10 6 10 2 4 8 5 9 1 1 4 7 3 9-1 5 0 8-5 6-10 3-4 1-9-3-10-1-6-8-8-12-5z"/><path class="s" d="M24 10v28M16 20c3 0 5 2 8 2M32 20c-3 0-5 2-8 2M16 30c3 0 5-2 8-2M32 30c-3 0-5-2-8-2"/>',
 hati:'<path class="f" d="M5 22c0-8 8-10 20-10 10 0 18 4 18 12 0 9-8 14-17 14-6 0-8-4-12-6-5-2-9-3-9-10z"/><path class="s" d="M30 18c2 4 1 8-2 11"/>',
 kulit:'<rect class="f" x="8" y="9" width="32" height="9" rx="4.5"/><rect class="f" x="8" y="20" width="32" height="9" rx="4.5" opacity=".7"/><rect class="f" x="8" y="31" width="32" height="9" rx="4.5" opacity=".45"/>',
 gigi:'<path class="f" d="M13 8c-5 0-7 6-6 12 1 6 3 9 4 16 1 5 5 5 6 0 1-4 2-7 3-7s2 3 3 7c1 5 5 5 6 0 1-7 3-10 4-16 1-6-1-12-6-12-4 0-6 2-7 2s-3-2-7-2z"/>',
-jantung:'<path class="f" d="M24 41C8 30 5 21 8 14c3-6 11-6 16 1 5-7 13-7 16-1 3 7 0 16-16 27z"/><path class="s" d="M14 17c-2 2-2 5-1 7"/>'};
+jantung:'<path class="f" d="M24 41C8 30 5 21 8 14c3-6 11-6 16 1 5-7 13-7 16-1 3 7 0 16-16 27z"/><path class="s" d="M14 17c-2 2-2 5-1 7"/>',
+mata:'<path class="f" d="M3 24c6-10 14-14 21-14s15 4 21 14c-6 10-14 14-21 14S9 34 3 24z"/><circle cx="24" cy="24" r="9" fill="#fff"/><circle class="f" cx="24" cy="24" r="5"/>'};
 const ico=(k,c)=>`<svg class="ill" viewBox="0 0 48 48" style="--ic:${c}" aria-hidden="true">${OI[k]}</svg>`;
-const ORG=[['ginjal','Ginjal','#6cc4de','Gula tinggi berulang merusak pembuluh kecil ginjal (nefropati diabetik) hingga gagal ginjal.'],
-['otak','Otak','#b9a2e6','Gula memicu dopamin. Konsumsi berulang membentuk pola ketagihan manis.'],
-['hati','Hati','#f0a07a','Fruktosa berlebih tertimbun sebagai lemak hati (Nonalcoholic Fatty Liver Disease).'],
-['kulit','Kulit','#f4a6c6','Glikasi merusak kolagen dan elastin: penuaan dini dan jerawat lebih mudah muncul.'],
-['gigi','Gigi','#7fd6e6','Bakteri mengubah gula menjadi asam yang memicu karies dan erosi email.'],
-['jantung','Jantung','#e5566d','Trigliserida naik dan risiko penyakit kardiovaskular meningkat.']];
-const HID=['High Fructose Corn Syrup (HFCS)','Maltodextrin','Dextrose','Sucrose','Agave nectar','Invert sugar','Concentrated fruit juice','Glukosa / fruktosa / maltosa','Sirup jagung'];
-const MYTH=[['🍯','Gula aren, madu, dan gula jawa bebas kalori dan aman dikonsumsi sebanyak-banyaknya.','Semuanya tetap mengandung glukosa/fruktosa dan menaikkan gula darah, jadi tetap harus dibatasi.'],
-['🧃','Jus buah kemasan sama sehatnya dengan buah utuh.','Jus kemasan kehilangan serat alami dan sering ditambah gula konsentrat, sehingga gula terserap secepat soda.']];
+
+/* ---------- DATA EDUKASI ---------- */
+const ORG=[
+{k:'otak',n:'Otak',c:'#b9a2e6',x:100,y:24,h:'Ketergantungan dopamin, brain fog, dan neuroinflamasi',p:['Gula mengaktifkan jalur reward dan melepas dopamin. Konsumsi berulang membuat kamu butuh porsi lebih besar untuk rasa puas yang sama.','Naik-turun glukosa darah memicu sulit fokus, lemas, dan "brain fog".','Pola makan tinggi gula dikaitkan dengan peradangan saraf (neuroinflamasi). Bukti pada manusia masih berkembang.']},
+{k:'mata',n:'Mata',c:'#6cc4de',x:100,y:44,h:'Retinopati diabetik: risiko gangguan penglihatan hingga kebutaan',p:['Gula darah tinggi kronis merusak pembuluh darah halus di retina.','Tahap awal sering tanpa gejala. Penyandang diabetes perlu periksa mata rutin.','Retinopati diabetik termasuk penyebab utama gangguan penglihatan pada usia produktif.']},
+{k:'gigi',n:'Gigi',c:'#7fd6e6',x:100,y:64,h:'Karies dan erosi email gigi',p:['Bakteri mulut mengubah gula menjadi asam yang mengikis email.','Frekuensi lebih berbahaya daripada jumlah: menyeruput minuman manis sepanjang hari membuat gigi terus terpapar asam.','WHO menyebut pembatasan gula bebas di bawah 10% (idealnya 5%) membantu menekan karies.']},
+{k:'jantung',n:'Jantung',c:'#e5566d',x:112,y:112,h:'Trigliserida naik dan risiko kardiovaskular meningkat',p:['Gula berlebih meningkatkan trigliserida dan menurunkan kolesterol HDL.','Kalori cair dari minuman manis mendorong kenaikan berat badan dan tekanan darah.','Kombinasi ini meningkatkan risiko penyakit jantung dan stroke.']},
+{k:'hati',n:'Hati',c:'#f0a07a',x:82,y:150,h:'Perlemakan hati non-alkohol (NAFLD)',p:['Fruktosa hampir seluruhnya diolah di hati. Kelebihannya diubah menjadi lemak (lipogenesis).','Lemak yang menumpuk menyebabkan perlemakan hati, sering tanpa gejala.','Tanpa perubahan pola hidup, bisa berlanjut menjadi peradangan dan fibrosis hati. Istilah medis terbaru: MASLD.']},
+{k:'ginjal',n:'Ginjal',c:'#6cc4de',x:84,y:182,h:'Kerusakan glomerulus dan gagal ginjal kronis',p:['Gula darah tinggi menahun dan hipertensi merusak glomerulus, unit penyaring ginjal (nefropati diabetik).','Tanda awalnya protein bocor ke urin. Tanpa kendali, fungsi ginjal turun menjadi gagal ginjal kronis.','Tahap akhir memerlukan hemodialisis (cuci darah) atau transplantasi. Gagal ginjal punya banyak penyebab, tetapi diabetes adalah salah satu yang utama.']},
+{k:'kulit',n:'Kulit',c:'#f4a6c6',x:40,y:150,h:'Glikasi kolagen (AGEs): keriput dini dan jerawat',p:['Gula menempel pada kolagen dan elastin membentuk AGEs (Advanced Glycation End-products) sehingga kulit kaku dan cepat berkeriput.','Lonjakan insulin dapat meningkatkan produksi minyak kulit sehingga jerawat lebih mudah muncul.','Mengurangi gula tidak langsung menghapus keriput, tetapi memperlambat kerusakan baru.']}];
+const FLOW=[['🥤','Minuman manis harian','Kalori cair terserap cepat dan tidak membuat kenyang, sehingga asupan gula mudah berlebih.'],['📈','Resistensi insulin','Sel makin kurang peka terhadap insulin, sehingga pankreas harus memproduksi lebih banyak.'],['⚖️','Sindrom metabolik','Lemak perut, trigliserida, tekanan darah, dan gula darah naik bersamaan.'],['🩸','Diabetes tipe 2 dini','Pankreas tak lagi mengimbangi, gula darah tetap tinggi bahkan pada usia muda.'],['🫘','Nefropati diabetik','Gula tinggi dan hipertensi merusak glomerulus ginjal; protein bocor ke urin.'],['⚠️','Gagal ginjal kronis','Fungsi penyaringan ginjal menurun drastis dan tidak pulih.'],['🏥','Hemodialisis','Cuci darah rutin seumur hidup, atau transplantasi ginjal. Tidak semua orang mengikuti alur ini: genetik, berat badan, dan tekanan darah ikut berperan.']];
+const DICT=[
+['High Fructose Corn Syrup (HFCS)','sirup jagung fruktosa tinggi','Sirup dari pati jagung dengan fruktosa tinggi. Umum di minuman bersoda dan sirup.'],
+['Isoglucose','isoglukosa, glukosa-fruktosa','Nama lain HFCS di Uni Eropa.'],
+['Corn syrup','sirup jagung, sirup glukosa','Sirup glukosa dari pati jagung, pemanis murah di banyak produk olahan.'],
+['Maltodextrin','maltodekstrin','Karbohidrat olahan yang cepat terserap dan indeks glikemiknya tinggi. Sering ada di minuman serbuk dan tidak selalu terasa manis.'],
+['Dextrose','dekstrosa, glukosa','Bentuk glukosa murni yang langsung menaikkan gula darah.'],
+['Glucose / glucose syrup','glukosa, sirup glukosa','Gula sederhana yang menjadi bahan bakar utama tubuh. Berlebih tetap dihitung gula tambahan.'],
+['Sucrose','sukrosa, gula pasir, gula meja','Gula meja: setengah glukosa, setengah fruktosa.'],
+['Fructose / Crystalline fructose','fruktosa, fruktosa kristal','Gula buah dalam bentuk murni. Diolah di hati; berlebihan memicu lemak hati.'],
+['Maltose','maltosa, gula malt','Gula malt dari pati; ada di sirup malt, sereal, dan minuman malt.'],
+['Lactose','laktosa','Gula alami susu. Susu berperisa biasanya masih ditambah gula lain.'],
+['Invert sugar','gula invert, sirup invert','Sukrosa yang dipecah menjadi glukosa dan fruktosa. Lebih manis dan lembap, dipakai di kue dan minuman.'],
+['Agave nectar','agave, sirup agave','Sering dipasarkan sebagai "alami", tetapi sangat tinggi fruktosa.'],
+['Molasses','molase, tetes tebu','Sisa pengolahan tebu. Ada sedikit mineral, tetapi tetap gula.'],
+['Honey','madu','Campuran glukosa dan fruktosa. Tetap dihitung gula tambahan.'],
+['Palm / coconut sugar','gula aren, gula kelapa, gula jawa','Sebagian besar sukrosa. Dihitung sebagai gula tambahan.'],
+['Cane / raw / brown sugar','gula tebu, gula mentah, gula merah, brown sugar','Kurang dimurnikan, tetapi kalorinya hampir sama dengan gula pasir.'],
+['Concentrated fruit juice','sari buah pekat, jus konsentrat','Jus yang dipekatkan tanpa serat. Termasuk gula bebas menurut WHO.'],
+['Rice / malt syrup','sirup beras, sirup malt','Sirup pati yang kaya glukosa dan maltosa.'],
+['Caramel','karamel','Gula yang dipanaskan; pemanis sekaligus pewarna pada minuman.']];
+const HID=DICT.length;
+const MYTH=[
+['🍯','Gula aren sehat, aman dikonsumsi banyak','Gula aren memang punya sedikit mineral dan indeks glikemik yang dilaporkan lebih rendah, tetapi sebagian besar tetap sukrosa. Dihitung gula tambahan, jadi total tetap maksimal 50 g per hari.'],
+['🧃','Jus buah kemasan sama sehatnya dengan buah utuh','Jus kehilangan serat dan sering ditambah gula. Menkes (Jan 2026) menyoroti jus kemasan yang gulanya lebih menonjol daripada porsi buahnya. WHO menghitung gula dalam jus sebagai gula bebas, sedangkan buah utuh tidak.'],
+['🧊','Minuman es bikin gemuk','Dinginnya tidak menambah lemak. Yang menambah kalori adalah gula, sirup, dan susu kental manis di dalamnya. Es batu dan air tidak berkalori.'],
+['🧋','Less sugar berarti bebas gula','Boba 45 g gula pada level 50% masih ±22 g, sudah hampir setengah batas harian. Pilih no sugar atau 25% kalau ingin benar-benar rendah.']];
+const SPN=[['🧋','Boba milk tea',45],['🥫','Soda kaleng',35],['🥤','Es teh jumbo',40]];
 const STREET=[['Es Teh Manis',25,'🥤'],['Es Jeruk',28,'🍊'],['Kopi Susu Aren',25,'☕'],['Thai Tea / Green Tea',38,'🍵'],['Boba Drink',45,'🧋'],['Nutrisari / Serbuk',20,'🥛'],['Es Doger / Cendol',35,'🍧'],['Martabak Manis',36,'🥞'],['Kolak',30,'🥣'],['Klepon',15,'🟢'],['Lupis Ketan',22,'🍡'],['Bubur Sumsum',28,'🍚'],['Kue Basah / Cubit',18,'🧁']];
 const SIZE=[['Kecil / plastik cucuk (x0,75)',.75],['Gelas standar / mangkok (x1)',1],['Jumbo / bungkus besar (x1,5)',1.5]];
 const SWEET=[['Normal sweet (100%)',1],['Less sugar (50%)',.5],['Extra sweet (150%)',1.5],['Tawar / no sugar (0 g)',0]];
@@ -64,96 +94,37 @@ ${EST.photo?`<img class="ph" src="${EST.photo}" alt="Foto makanan atau minuman">
 
 const waterHTML=()=>`<div class="card"><div class="wt"><div class="tank"><div class="fill e" id="wF"></div><span id="wP">0%</span></div><div class="wi"><b id="wT"></b><small>Target 2.000 ml (8 gelas × 250 ml)</small><div class="bar"><i id="wB"></i></div><div class="rowb"><button class="btn sm" data-a="w250">+250 ml (1 gelas)</button><button class="btn sm" data-a="w500">+500 ml (1 botol sedang)</button><button class="btn sm g" data-a="wm">− 250 ml</button></div></div></div><p class="mu" style="margin:.6rem 0 0">Air putih yang cukup membantu hidrasi dan fungsi ginjal. Reset otomatis tiap hari.</p></div>`;
 
-/* ---------- VIEWS ---------- */
-const V={
-'':()=>`<div class="card hero"><h1>Manis hari ini, tagihan di masa depan</h1><p>Gula berlebih bekerja diam-diam. Pelajari bagaimana minuman manis harian dapat membebani ginjal, hati, dan jantung, lalu cek asupanmu.</p><a class="btn" style="text-decoration:none" href="#/kalkulator">Hitung gula saya</a></div>
-<h2>Krisis cuci darah usia muda</h2>${fact(ico('ginjal','#6cc4de'),`<p>Minuman manis kemasan atau es teh tinggi fruktosa yang dikonsumsi berulang dapat memicu <b>resistensi insulin</b> dan <b>sindrom metabolik</b>, lalu <b>diabetes melitus tipe 2 dini</b>, <b>nefropati diabetik</b>, hingga <b>gagal ginjal kronis</b> yang memerlukan <b>hemodialisis (cuci darah)</b>, bahkan di usia muda.</p><p class="mu">Gagal ginjal punya banyak penyebab (hipertensi, genetik, obesitas, dll). Gula berlebih adalah salah satu faktor yang bisa dikendalikan.</p>`)}
-<h2>Biological sugar crash</h2><div class="card pink"><ul><li>Gula cepat serap membuat glukosa darah melonjak.</li><li>Pankreas melepas insulin berlebih (<b>insulin spike</b>).</li><li>Glukosa turun drastis: <b>food coma</b>, mengantuk, sulit fokus, lemas.</li><li>Tubuh meminta gula lagi (<b>cravings</b>) dan siklus berulang.</li></ul></div>
-<h2>Dampak pada organ tubuh</h2><div class="og">${ORG.map(o=>`<div class="card oc">${ico(o[0],o[2])}<h3>${o[1]}</h3><p>${o[3]}</p></div>`).join('')}</div>
-<h2>Cara membaca label Nutrition Facts</h2><div class="card lilac"><p><b>Hitung total gula:</b> gula per saji × jumlah sajian per kemasan (Servings Per Container). Kemasan 2 sajian dengan 15 g gula berarti 30 g jika dihabiskan.</p><h3>Gula tersembunyi</h3><ul>${HID.map(h=>`<li>${h}</li>`).join('')}</ul><p class="mu">Semakin atas posisi nama ini dalam daftar komposisi, semakin banyak kandungannya.</p></div>`,
+/* ---------- SEKSI EDUKASI ---------- */
+const secReg=()=>`<section class="sec"><h2>Batas aman konsumsi gula</h2>
+<div class="two"><div class="card big"><b>50 g</b><span>Batas maksimal harian</span><small>Permenkes No. 30 Tahun 2013 · ≈ 4 sdm · 10% dari 2.000 kkal</small></div>
+<div class="card big mint"><b>25 g</b><span>Anjuran ideal WHO</span><small>Conditional recommendation · ≈ 2 sdm · 5% energi</small></div></div>
+<div class="card"><h3>Hitung batasmu sendiri</h3><label>Kebutuhan energi: <b id="enT"></b><input id="en" type="range" min="1200" max="3000" step="100" value="${UI.en}"></label><div class="out" id="enO" style="margin-top:.7rem"></div>
+<p class="mu" style="margin:.6rem 0 0">WHO (2015) menyarankan gula bebas (gula tambahan, madu, sirup, dan gula dalam jus) kurang dari 10% energi harian. Di bawah 5% memberi manfaat kesehatan tambahan. Permenkes 30/2013 juga membatasi natrium 2.000 mg dan lemak total 67 g per hari.</p></div></section>`;
 
-tahu:()=>`<h1>Tahukah kamu?</h1>
-${fact(cup(78),`<h3>Es teh jumbo</h3><p>Porsi 700–1000 ml berisi sekitar <b>36–50 g gula</b>, sudah menyamai batas harian WHO (50 g) dalam sekali minum.</p>${cubes(12)}<small>≈ 9–12 sendok teh gula</small>`,'warnbox')}
-${fact('<span class="em">🍅</span>',`<h3>Gula tersembunyi</h3><p>1 sendok makan saus tomat atau sambal botolan mengandung ±4 g gula.</p>${cubes(1)}`)}
-<h2>Data resmi Indonesia</h2>
+const secData=()=>`<section class="sec"><h2>Krisis diabetes dan cuci darah</h2>
+<div class="card hero2 lilac"><div class="rk">#5</div><p><b>Peringkat 5 dunia.</b> IDF Diabetes Atlas menempatkan Indonesia di peringkat kelima jumlah dewasa (20–79 tahun) dengan diabetes, sekitar 19,47 juta orang pada 2021. Secara global, 589 juta dewasa hidup dengan diabetes pada 2024 (IDF Atlas edisi ke-11).</p></div>
 <div class="card"><div class="out">
-<div><b>47,5%</b>penduduk usia 3 tahun ke atas minum manis lebih dari 1× per hari (SKI 2023)</div>
+<div><b>47,5%</b>penduduk usia 3 tahun ke atas minum manis lebih dari 1× sehari (SKI 2023)</div>
 <div><b>11,7%</b>penduduk dengan kadar gula di atas normal (SKI 2023)</div>
 <div><b>17,9%</b>penyandang diabetes yang tahu kondisinya dan rutin berobat (SKI 2023)</div>
-<div><b>235</b>per 1 juta penduduk menjalani hemodialisis (Kemenkes)</div>
 <div><b>20–35 g</b>rata-rata gula per minuman kemasan manis (Menkes, Jan 2026)</div>
+<div><b>235</b>per 1 juta penduduk menjalani hemodialisis (Kemenkes)</div>
+<div><b>1.225</b>layanan hemodialisis di Indonesia (Kemenkes)</div>
 <div><b>31,4%</b>proporsi pasien cuci darah usia 25–34 tahun (2023), naik dari 19,29% (2018)*</div>
-</div>
-<p class="mu" style="margin-top:.7rem">*Dikutip dari pemberitaan yang merujuk SKI 2023. Gagal ginjal punya banyak penyebab, terutama diabetes dan hipertensi. Gula berlebih adalah faktor risiko yang bisa dikendalikan. Sumber: Kemenkes RI, Survei Kesehatan Indonesia 2023.</p></div>
-<h2>Mitos vs Fakta</h2>${MYTH.map(m=>fact(`<span class="em">${m[0]}</span>`,`<p>❌ <b>Mitos:</b> ${m[1]}</p><p>✅ <b>Fakta:</b> ${m[2]}</p>`)).join('')}`,
+<div><b>56,4%</b>remaja 15–19 tahun minum manis minimal 1× sehari*</div></div>
+<p class="mu" style="margin:.7rem 0 0">Kemenkes menyatakan gagal ginjal kronis mulai merambah usia produktif, dan data Indonesian Renal Registry (Pernefri) menunjukkan pasien baru hemodialisis meningkat pada 2016–2020. Gagal ginjal punya banyak penyebab, terutama diabetes dan hipertensi; minuman manis harian adalah faktor risiko yang bisa dikendalikan.<br>*Dikutip dari pemberitaan/skripsi yang merujuk SKI 2023. Cek angka resmi terbaru di Kemenkes BKPK, IDF, dan Pernefri.</p></div>
+<details><summary>Alur dari minuman manis sampai cuci darah</summary><ol class="flow">${FLOW.map((s,i)=>`<li><button type="button" data-a="stp" data-i="${i}" class="${i?'':'on'}"><span>${s[0]}</span>${s[1]}</button></li>`).join('')}</ol><div class="card lilac" id="stpD" style="margin-bottom:.8rem"></div></details></section>`;
 
-kalkulator:()=>`<h1>Kalkulator asupan</h1>${meter()}
-<div class="card"><div class="bt"><h3>Pilih makanan / minuman</h3><label class="qt">Jumlah<input id="pQ" type="number" min="1" max="20" value="${UI.pq}"></label></div>
-<div class="tabs">${PRE.map((g,i)=>`<button type="button" class="chip${i===UI.tab?' on':''}" data-a="tab" data-i="${i}">${g[2]} ${g[0]}</button>`).join('')}</div>
-<div class="fg">${PRE[UI.tab][1].map((x,i)=>fc(x,'pc',i,UI.tab)).join('')}</div><p class="mu" style="margin:0">Ketuk kartu untuk menambahkan ke catatan.</p></div>
-<div class="card"><h3>Estimasi kaki lima (tanpa label)</h3><div class="fg sg">${STREET.map((x,i)=>fc(x,'ps',i,1,i===UI.sel)).join('')}</div>
-<div class="row"><label>Ukuran<select id="eS">${opt(SIZE,UI.sz)}</select></label><label>Level manis<select id="eW">${opt(SWEET,UI.sw)}</select></label></div><button class="btn" data-a="est">Tambahkan estimasi</button></div>
-${estHTML()}
-<div class="card"><h3>Input manual</h3><div class="row"><label>Nama<input id="mN" maxlength="40" placeholder="Nama makanan"></label><label>Gula (gram)<input id="mG" type="number" min="0.1" step="0.1" placeholder="0"></label></div><button class="btn" data-a="man">Tambahkan</button></div>
-<div class="card"><div class="bt"><h3>Catatan hari ini</h3><button class="btn sm g" data-a="clr">Hapus semua</button></div><ul class="list">${S.items.length?S.items.map((it,i)=>`<li><span>${esc(it.n)}<br><small>${it.q} × ${f(it.g)} g = ${f(it.g*it.q)} g</small></span><button data-a="del" data-i="${i}" aria-label="Hapus ${esc(it.n)}">✕</button></li>`).join(''):'<li class="mu">Belum ada catatan.</li>'}</ul></div>`,
+const secCrash=()=>`<section class="sec"><details open><summary>⚡ Biological sugar crash</summary><ol><li>Gula cepat serap membuat glukosa darah melonjak.</li><li>Pankreas melepas insulin berlebih (<b>insulin spike</b>).</li><li>Glukosa turun drastis: <b>food coma</b>, mengantuk, sulit fokus, lemas.</li><li>Tubuh meminta gula lagi (<b>cravings</b>) dan siklus berulang.</li></ol></details>
+<details><summary>🥤 Apa itu SSB?</summary><p><b>Sugar-Sweetened Beverages</b> adalah minuman dengan gula tambahan: teh manis, soda, boba, kopi susu, minuman serbuk, dan jus kemasan. Kalori cair tidak membuat kenyang, sehingga mudah melampaui batas harian.</p></details></section>`;
 
-konverter:()=>`<h1>Konverter & Burn Calculator</h1>
-<div class="card"><h3>Konversi gula</h3><label>Gram gula<input id="cG" type="number" min="0" step="0.1" value="${f(tot()).replace(',','.')}"></label><div class="out" id="cO" style="margin-top:.7rem"></div><p class="mu" style="margin-top:.6rem">1 sdt = 4 g · 1 sdm = 12,5 g · 1 g gula = 4 kkal</p></div>
-<div class="card mint"><h3>Burn calculator</h3><label>Kalori yang ingin dibakar (kkal)<input id="bK" type="number" min="0" value="${Math.round(tot()*4)}"></label><div class="out" id="bO" style="margin-top:.7rem"></div><p class="mu" style="margin-top:.6rem">Perkiraan kasar untuk berat badan ±60 kg. Hasil nyata bergantung berat badan dan intensitas.</p></div>`,
+const secBody=()=>`<section class="sec"><h2>Peta dampak pada organ tubuh</h2><div class="card"><div class="bm"><svg class="body" viewBox="0 0 200 330" role="group" aria-label="Peta organ tubuh">
+<g class="sil"><circle cx="100" cy="44" r="34"/><rect x="88" y="74" width="24" height="16" rx="6"/><rect x="58" y="86" width="84" height="132" rx="38"/><rect x="26" y="96" width="26" height="120" rx="13"/><rect x="148" y="96" width="26" height="120" rx="13"/><rect x="66" y="208" width="30" height="112" rx="15"/><rect x="104" y="208" width="30" height="112" rx="15"/></g>
+${ORG.map(o=>{const pts=o.k==='ginjal'?[[84,182],[116,182]]:[[o.x,o.y]];return pts.map(p=>`<g class="hs" data-a="org" data-k="${o.k}" tabindex="0" role="button" aria-label="${o.n}" style="--hc:${o.c}"><circle class="r" cx="${p[0]}" cy="${p[1]}" r="8"/><circle class="c" cx="${p[0]}" cy="${p[1]}" r="8"/></g>`).join('')}).join('')}</svg>
+<div><div class="tabs">${ORG.map(o=>`<button type="button" class="chip" data-a="org" data-k="${o.k}">${o.n}</button>`).join('')}</div><div id="orgD"></div></div></div><p class="mu" style="margin:0">Ketuk titik pada tubuh atau pilih nama organ.</p></div></section>`;
 
-solusi:()=>{const t=tot();return `<h1>Solusi & action plan</h1>${meter()}
-<div class="card ${t>LIM?'pink':t>=37.5?'warnbox':'mint'}"><h3>${t>LIM?'Kamu melebihi batas':t>=37.5?'Hampir mencapai batas':'Asupan masih aman'}</h3><p>${t>LIM?'Jalan cepat 30 menit atau olahraga ringan, perbanyak air putih, dan hentikan minuman manis sampai besok.':t>=37.5?'Ganti minuman manis berikutnya dengan air putih atau teh tawar.':'Pertahankan! Utamakan air putih dan buah utuh.'}</p></div>
-<h2>Water tracker</h2>${waterHTML()}
-<h2>Harm reduction: turunkan bertahap</h2><div class="card"><ul><li><b>Minggu 1–2:</b> turunkan level manis dari 100% ke 75%.</li><li><b>Minggu 3–4:</b> turun ke 50% (less sugar).</li><li><b>Minggu 5–6:</b> turun ke 25%, lalu coba tawar.</li><li>Kurangi ukuran: jumbo → standar → kecil.</li><li>Ganti satu minuman manis per hari dengan air putih.</li></ul></div>
-<h2>Pemanis & perisa rendah kalori</h2><div class="card lilac"><ul><li><b>Stevia</b> dan <b>erythritol</b>: pemanis tanpa/rendah kalori.</li><li><b>Kayu manis</b> dan <b>ekstrak vanila</b>: memberi kesan manis tanpa gula.</li><li><b>Air lemon / jeruk nipis</b>: segar tanpa gula.</li></ul><p class="mu">Madu dan gula aren tetap dihitung sebagai gula.</p></div>`}
-};
+const secDict=()=>`<section class="sec"><h2>Kamus gula tersembunyi</h2><div class="card"><input id="dq" type="search" placeholder="Cari nama gula, mis. HFCS, maltodekstrin, madu" aria-label="Cari nama gula"><p class="mu" id="dn" style="margin:.5rem 0"></p><div id="dl"></div><p class="mu" style="margin:.6rem 0 0">Tips: nama berakhiran <b>-osa</b> (sukrosa, dekstrosa, maltosa) biasanya gula. Semakin awal posisinya di daftar komposisi, semakin banyak kandungannya.</p></div></section>`;
 
-/* ---------- UPDATERS ---------- */
-function conv(){const g=parseFloat($('#cG').value)||0;$('#cO').innerHTML=`<div><b>${f(g/4)}</b>sendok teh</div><div><b>${f(g/12.5)}</b>sendok makan</div><div><b>${f(g*4)}</b>kkal</div><div><b>${f(g)}</b>gram</div>`}
-function burn(){const k=parseFloat($('#bK').value)||0;$('#bO').innerHTML=ACT.map(a=>`<div><b>${Math.ceil(k/a[1])} mnt</b>${a[0]}</div>`).join('')}
-const estG=()=>EK[EST.k][1]*EST.ml/100*SWEET[EST.si][1];
-function estUI(){if(!$('#eMl'))return;const g=estG(),ml=EST.ml;
-$('#eMlT').textContent=`${ml} ml · ${['Kecil','Sedang','Jumbo'][zone(ml)]}`;$('#eMl').value=ml;
-$('#eO').innerHTML=`<div><b>${f(g)} g</b>gula</div><div><b>${f(g*4)} kkal</b>dari gula</div><div><b>${f(g/4)} sdt</b>sendok teh</div><div><b>${Math.round(g/LIM*100)}%</b>batas harian</div>`;
-$$('.gt').forEach(t=>t.classList.toggle('on',zone(+t.dataset.ml)===zone(ml)))}
-function waterUI(){if(!$('#wT'))return;const p=Math.min(100,S.ml/GOAL*100);
-$('#wF').classList.toggle('e',S.ml===0);$('#wF').style.height=p+'%';$('#wB').style.width=p+'%';$('#wP').textContent=Math.round(p)+'%';
-$('#wT').textContent=`Terpenuhi: ${S.ml.toLocaleString('id-ID')} ml / 2.000 ml – ${f(S.ml/250)} gelas${S.ml>=GOAL?' ✅ Target tercapai':''}`}
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1600)}
-
-/* ---------- ROUTER & EVENTS ---------- */
-function render(){const r=location.hash.replace('#/','');const k=V.hasOwnProperty(r)?r:'';
-$('#app').innerHTML=V[k]();$$('.bn a').forEach(a=>a.classList.toggle('on',a.dataset.r===k));
-if(k==='konverter'){conv();burn();$('#cG').oninput=conv;$('#bK').oninput=burn}
-if(k==='kalkulator')estUI();
-if(k==='solusi')requestAnimationFrame(()=>requestAnimationFrame(waterUI));
-window.scrollTo(0,0)}
-function keep(){const y=window.scrollY;render();window.scrollTo(0,y)}
-function add(n,g,q){if(n&&g>=0&&q>0){S.items.push({n,g,q});save();toast('Ditambahkan: '+n);keep()}}
-function water(d){S.ml=Math.max(0,Math.min(4000,S.ml+d));save();waterUI()}
-
-document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,i=+b.dataset.i;
-if(a==='tab'){UI.pq=$('#pQ').value;UI.tab=i;keep()}
-else if(a==='pc'){const p=PRE[UI.tab][1][i];UI.pq=$('#pQ').value;add(p[0],p[1],parseInt(UI.pq,10)||1)}
-else if(a==='ps'){UI.sel=i;$$('.sg .fc').forEach((c,j)=>c.classList.toggle('sel',j===i))}
-else if(a==='est'){const t=STREET[UI.sel],s=SIZE[UI.sz],w=SWEET[UI.sw];add(`${t[0]} (${s[0].split(' (')[0]}, ${w[0].split(' (')[0]})`,Math.round(t[1]*s[1]*w[1]*10)/10,1)}
-else if(a==='gz'){EST.ml=+b.dataset.ml;estUI()}
-else if(a==='estp'){add(`Foto: ${EK[EST.k][0]} ${EST.ml} ml (${SWEET[EST.si][0].split(' (')[0]})`,Math.round(estG()*10)/10,1)}
-else if(a==='man'){add($('#mN').value.trim(),parseFloat($('#mG').value),1)}
-else if(a==='del'){S.items.splice(i,1);save();keep()}
-else if(a==='clr'){if(S.items.length&&confirm('Hapus semua catatan?')){S.items=[];save();keep()}}
-else if(a==='w250')water(250);else if(a==='w500')water(500);else if(a==='wm')water(-250)});
-
-document.addEventListener('change',e=>{const t=e.target,v=t.value;
-if(t.id==='eS')UI.sz=+v;else if(t.id==='eW')UI.sw=+v;else if(t.id==='pQ')UI.pq=v;
-else if(t.id==='eK'){EST.k=+v;estUI()}else if(t.id==='eP'){EST.si=+v;estUI()}
-else if(t.id==='eC'||t.id==='eF'){const file=t.files[0];if(!file)return;if(EST.photo)URL.revokeObjectURL(EST.photo);EST.photo=URL.createObjectURL(file);keep()}});
-document.addEventListener('input',e=>{if(e.target.id==='eMl'){EST.ml=+e.target.value;estUI()}});
-window.addEventListener('hashchange',render);
-
-/* ---------- PWA ---------- */
-let dp;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('#inst').hidden=false});
-$('#inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('#inst').hidden=true}};
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
-render();
-})();
+const secLabel=()=>`<section class="sec"><h2>Panduan label BPOM</h2>
+<div class="card lilac"><h3>Logo "Pilihan Lebih Sehat"</h3><p><span class="pls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e8f68" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>Pilihan Lebih Sehat</span></p><p>Logo centang hijau dari BPOM RI, dipasang secara sukarela pada produk yang memenuhi batas gula, garam, dan lemak. Untuk minuman, ambang gulanya sekitar 6 g per 100 ml (Peraturan BPOM No. 22/2019 dan No. 26/2021). Logo ini bukan berarti boleh diminum sebanyak-banyaknya.</p>
+<h3>Nutri-Level A–D</h3><div clas
